@@ -3,23 +3,24 @@ from dotenv import load_dotenv
 from azure.cognitiveservices.vision.customvision.prediction import CustomVisionPredictionClient
 from msrest.authentication import ApiKeyCredentials
 
-def load_configuration():
-    """Loads configuration settings from environment variables."""
-    load_dotenv()
-    prediction_endpoint = os.getenv('PredictionEndpoint')
-    prediction_key = os.getenv('PredictionKey')
-    project_id = os.getenv('ProjectID')
-    model_name = os.getenv('ModelName')
-    return prediction_endpoint, prediction_key, project_id, model_name
+load_dotenv()
 
-def authenticate_client(prediction_endpoint, prediction_key):
-    """Authenticates a client for the Custom Vision prediction API."""
-    credentials = ApiKeyCredentials(in_headers={"Prediction-key": prediction_key})
-    return CustomVisionPredictionClient(endpoint=prediction_endpoint, credentials=credentials)
+'''Loading configuration'''
+prediction_endpoint = os.getenv('PredictionEndpoint')
+prediction_key = os.getenv('PredictionKey')
+project_id = os.getenv('ProjectID')
+model_name = os.getenv('ModelName')
 
-def classify_images(prediction_client, project_id, model_name, image_dir):
-    """Classifies images in a directory using the provided model."""
-    for image_name in os.listdir(image_dir):
+
+'''Authentication'''
+credentials = ApiKeyCredentials(in_headers={"Prediction-key": prediction_key})
+prediction_client=CustomVisionPredictionClient(endpoint=prediction_endpoint, credentials=credentials)
+
+image_dir = r'D:\Internship\upload\Task4\test_image' 
+
+
+'''Prediction'''
+for image_name in os.listdir(image_dir):
         image_path = os.path.join(image_dir, image_name)
         with open(image_path, "rb") as image_data:
             results = prediction_client.classify_image(project_id, model_name, image_data)
@@ -27,16 +28,3 @@ def classify_images(prediction_client, project_id, model_name, image_dir):
             for prediction in results.predictions:
                 if prediction.probability > 0.5:
                     print(f"{image_name}: {prediction.tag_name} ({prediction.probability:.4f})")
-
-def main():
-    """Main entry point of the program."""
-    try:
-        prediction_endpoint, prediction_key, project_id, model_name = load_configuration()
-        prediction_client = authenticate_client(prediction_endpoint, prediction_key)
-        image_dir = r'D:\Internship\upload\Task4\test_image' 
-        classify_images(prediction_client, project_id, model_name, image_dir)
-    except Exception as ex:
-        print(f"An error occurred: {ex}")
-
-if __name__ == "__main__":
-    main()
