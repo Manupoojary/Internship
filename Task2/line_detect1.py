@@ -1,6 +1,9 @@
 import cv2
 import numpy as np
-image1=cv2.imread("line.jpg")
+import rotation
+import disc
+
+image1=rotation.rotate('line.jpg')
 
 black_image=cv2.cvtColor(image1,cv2.COLOR_BGR2GRAY)
 

@@ -1,6 +1,9 @@
 import cv2
 import numpy as np
 import os
+import rotation
+import disc
+import mark
 
 def find_thinnest_line(image_path):
     # Check if the image file exists
@@ -37,10 +40,13 @@ def find_thinnest_line(image_path):
     x, y = (thinnest_point[0, 0] + thinnest_point[0, 2]) // 2, (thinnest_point[0, 1] + thinnest_point[0, 3]) // 2
     cv2.circle(img_thinnest, (x, y), 5, (0, 0, 255), -1)
 
-    # Display the image with the thinnest point
-    cv2.imshow('Thinnest Point', img_thinnest)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    rotate=rotation.rotate(img_thinnest)
+    # cv2.imshow('Thinnest Point',rotate)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+    disc.start(rotate,thinnest_point)
+    mark.point(rotate,thinnest_point)
+
 
     return thinnest_point
 
