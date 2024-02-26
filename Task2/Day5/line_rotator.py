@@ -5,17 +5,17 @@ import os
 
 def rotate(image):
     image = image
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     # Apply edge detection (if needed)
-    edges = cv2.Canny(gray, 50, 150, apertureSize=3)
+    canny_edges = cv2.Canny(gray_image, 50, 150, apertureSize=3)
 
     # Detect lines using Hough Line Transform
-    lines = cv2.HoughLines(edges, 1, np.pi / 180, 100)
+    detected_lines = cv2.HoughLines(canny_edges, 1, np.pi / 180, 100)
 
     # Draw detected lines on a copy of the original image
-    line_image = np.copy(image )
-    for line in lines:
+    line_image = np.copy(image)
+    for line in detected_lines:
         rho, theta = line[0]
         a = np.cos(theta)
         b = np.sin(theta)
@@ -38,11 +38,6 @@ def rotate(image):
     center = (w // 2, h // 2)
     rotation_matrix = cv2.getRotationMatrix2D(center, angle, 1.0)
     rotated_image = cv2.warpAffine(image, rotation_matrix, (w, h), flags=cv2.INTER_LINEAR)
-
-    
-    # cv2.imwrite('Rotated_Image.jpg', rotated_image)
-    # cv2.imshow("Rot",rotated_image)
-    # cv2.waitKey(0)
     return rotated_image
 
 if __name__=="__main__":
