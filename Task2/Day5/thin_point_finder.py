@@ -11,6 +11,9 @@ gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 # Apply edge detection
 canny_edges = cv2.Canny(gray_image, 50, 150, apertureSize=3)
 
+dilated = cv2.dilate(canny_edges, (5,5), iterations=3)
+
+
 # Find lines in the image
 detected_lines = cv2.HoughLinesP(canny_edges, rho=1, theta=np.pi/180, threshold=100, minLineLength=50, maxLineGap=10)
 
