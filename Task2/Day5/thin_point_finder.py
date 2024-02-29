@@ -15,7 +15,7 @@ dilated = cv2.dilate(canny_edges, (5,5), iterations=3)
 
 
 # Find lines in the image
-detected_lines = cv2.HoughLinesP(canny_edges, rho=1, theta=np.pi/180, threshold=100, minLineLength=50, maxLineGap=10)
+detected_lines = cv2.HoughLinesP(dilated, rho=1, theta=np.pi/180, threshold=100, minLineLength=50, maxLineGap=10)
 
 # Find the thinnest point on each line
 thinnest_point = None
