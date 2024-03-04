@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import combiner
 import line_rotator
+import speech
 import os
 
 def main():
@@ -54,15 +55,15 @@ def main():
             if thinnest_point is not None:
                 cv2.circle(image, thinnest_point, 5, (0, 0, 255), -1)
 
-            cv2.imshow('Thin Point',image)
-            cv2.waitKey(0)  
+            # cv2.imshow('Thin Point',image)
+            # cv2.waitKey(1000)
 
             rotated_image=line_rotator.rotate(image)
-            combine_image=combiner.main(rotated_image,thinnest_point)
+            combine_image,focal_point=combiner.main(rotated_image,thinnest_point)
             cv2.imshow('Combined Image',combine_image)
-            cv2.waitKey(0)
+            cv2.waitKey(500)
+            speech.speak(focal_point)
             
-
 if __name__=='__main__':
     def __init__():
         main()
